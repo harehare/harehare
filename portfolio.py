@@ -227,15 +227,6 @@ SKILLS = OrderedDict(
         ],
     }
 )
-REPO_IMAGE: dict[str, str] = {
-    "textusm": "https://raw.githubusercontent.com/harehare/textusm/master/frontend/src/public/images/logo.svg",
-    "portable-kanban": "https://raw.githubusercontent.com/harehare/portable-kanban/master/assets/icon.png",
-    "gitype": "https://raw.githubusercontent.com/harehare/gitype/master/demo.gif",
-    "rbgrep": "https://raw.githubusercontent.com/harehare/rbgrep/master/assets/rbgrep.png",
-    "blazeman": "https://raw.githubusercontent.com/harehare/blazeman/master/.github/icon.svg",
-    "chick": "https://raw.githubusercontent.com/harehare/chick/master/img/logo.png",
-}
-
 
 # model
 state: State = {
@@ -250,11 +241,7 @@ def tab_changed(s: State, v: int):
         return
 
     req = js.XMLHttpRequest.new()
-    req.open(
-        "GET",
-        "https://api.github.com/users/harehare/repos?sort=stars&order=desc&per_page=100",
-        False,
-    )
+    req.open("GET", "./github.json", False)
     req.send()
     s["github"] = [
         {
@@ -262,7 +249,6 @@ def tab_changed(s: State, v: int):
             "description": repo["description"] if repo["description"] else "",
             "html_url": repo["html_url"],
             "language": repo["language"],
-            "image_url": REPO_IMAGE.get(repo["name"]),
         }
         for repo in filter(
             lambda x: not x.get("forked") and not x.get("private"),
@@ -366,71 +352,70 @@ def works_view(s: State) -> VDom:
         "div",
         {},
         [
-            p(
-                "ul",
-                {
-                    "class": "p-matrix",
-                },
-                [
-                    p(
-                        "li",
-                        {"class": "p-matrix__item"},
+            (
+                p(
+                    "ul",
+                    {
+                        "class": "p-matrix",
+                    },
+                    (
                         [
                             p(
-                                "img",
-                                {
-                                    "src": item["image_url"],
-                                    "alt": f"{item['name']}-image",
-                                    "class": "p-matrix__img",
-                                },
-                                [],
-                            )
-                            if item["image_url"]
-                            else p("div", {}, []),
-                            p(
-                                "div",
-                                {
-                                    "class": "p-matrix__content",
-                                    "style": "padding-left: 8px;",
-                                },
+                                "li",
+                                {"class": "p-matrix__item"},
                                 [
                                     p(
-                                        "h3",
-                                        {},
+                                        "div",
+                                        {
+                                            "class": "p-matrix__content",
+                                            "style": "padding-left: 8px;",
+                                        },
                                         [
                                             p(
-                                                "a",
-                                                {
-                                                    "class": "p-matrix__link",
-                                                    "href": item["html_url"],
-                                                    "target": "_blank",
-                                                    "rel": "noopener noreferrer",
-                                                },
-                                                [item["name"]],
+                                                "h3",
+                                                {"class": "p-matrix__title"},
+                                                [
+                                                    p(
+                                                        "a",
+                                                        {
+                                                            "class": "p-matrix__link",
+                                                            "href": item["html_url"],
+                                                            "target": "_blank",
+                                                            "rel": "noopener noreferrer",
+                                                        },
+                                                        [item["name"]],
+                                                    ),
+                                                ],
                                             ),
                                             p(
                                                 "div",
                                                 {"class": "p-matrix__desc"},
-                                                [p("p", {}, [item["description"]])],
+                                                [
+                                                    p(
+                                                        "p",
+                                                        {},
+                                                        [item["description"]],
+                                                    )
+                                                ],
                                             ),
                                         ],
-                                    )
+                                    ),
                                 ],
-                            ),
-                        ],
-                    )
-                    for item in s["github"]
-                ]
-                if isinstance(s["github"], list)
-                else [p("div", {}, [])],
-            )
-            if s["github"]
-            else p(
-                "div",
-                {
-                    "style": "font-size: 2.8rem; font-weight: 700; padding: 56px 16px 16px 16px;"
-                },
-                ["Loading..."],
+                            )
+                            for item in s["github"]
+                        ]
+                        if isinstance(s["github"], list)
+                        else [p("div", {}, [])]
+                    ),
+                )
+                if s["github"]
+                else p(
+                    "div",
+                    {
+                        "style": "font-size: 2.8rem; font-weight: 700; padding: 56px 16px 16px 16px;"
+                    },
+                    ["Loading..."],
+                )
             ),
         ],
     )
@@ -474,9 +459,11 @@ def tab_view(s: State, tab_index: int, icon: str, text: str, action) -> VDom:
             p(
                 "span",
                 {
-                    "style": f"background-color: #262626; color: {PRIMARY_COLOR}"
-                    if selected
-                    else "background-color: #262626; color: #3d4047"
+                    "style": (
+                        f"background-color: #262626; color: {PRIMARY_COLOR}"
+                        if selected
+                        else "background-color: #262626; color: #3d4047"
+                    )
                 },
                 [text],
             ),
