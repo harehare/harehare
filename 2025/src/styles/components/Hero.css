@@ -1,0 +1,103 @@
+/* Hero コンポーネントのスタイル */
+.hero-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    position: relative;
+    overflow: visible;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 1000px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.hello-wrapper {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 25px;
+    align-self: flex-start;
+}
+
+.hello-background {
+    position: absolute;
+    left: -10px;
+    top: 0;
+    width: 4px;
+    height: 35px;
+    background: var(--green);
+    border-radius: 2px;
+}
+
+.hello-text {
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    padding-left: 15px;
+    font-size: var(--fz-xl);
+    color: var(--green);
+    font-family: var(--font-mono);
+}
+
+.hero-heading-primary {
+    color: var(--lightest-slate);
+    margin-bottom: 15px;
+    font-size: clamp(40px, 8vw, 80px);
+    font-weight: 600;
+    line-height: 1.1;
+}
+
+.hero-heading-secondary {
+    color: var(--slate);
+    margin-bottom: 30px;
+    font-size: clamp(22px, 4vw, 40px);
+    font-weight: 400;
+    line-height: 1.1;
+}
+
+.hero-description {
+    max-width: 540px;
+    margin-top: 30px;
+    font-size: 18px;
+    line-height: 1.7;
+    color: var(--light-slate);
+}
+
+.hero-cta {
+    margin-top: 50px;
+}
+
+.hero-button {
+    cursor: pointer;
+    display: inline-block;
+    color: var(--green);
+    background-color: transparent;
+    border: 1.5px solid var(--green);
+    border-radius: 5px;
+    padding: 15px 25px;
+    font-size: var(--fz-sm);
+    font-family: var(--font-mono);
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-decoration: none;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.hero-button:hover {
+    background-color: var(--green-tint);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(113, 223, 231, 0.2);
+}

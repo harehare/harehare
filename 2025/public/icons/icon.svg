@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" fill="none">
+    <rect width="512" height="512" rx="100" fill="#16213E" />
+    <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Fira Code, monospace"
+        font-size="220" font-weight="600" fill="#71DFE7">T.S</text>
+    <rect x="100" y="340" width="312" height="30" rx="15" fill="#C65D7B" />
+</svg>
