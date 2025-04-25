@@ -5,6 +5,22 @@ import { navLinks } from "../data/data";
 const Header = () => {
   const [scrollDirection, setScrollDirection] = useState("none");
   const [scrolledToTop, setScrolledToTop] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Check if device is mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    // Initial check
+    checkMobile();
+
+    // Add resize listener
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   useEffect(() => {
     const threshold = 50;
@@ -37,6 +53,17 @@ const Header = () => {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Dynamically adjust padding based on screen size
+  const getPadding = () => {
+    if (window.innerWidth <= 480) {
+      return "0px 20px";
+    } else if (window.innerWidth <= 768) {
+      return "0px 30px";
+    } else {
+      return "0px 50px";
+    }
+  };
+
   const headerStyle = {
     height: "var(--nav-height)",
     background: "var(--navy)",
@@ -45,11 +72,11 @@ const Header = () => {
     left: 0,
     right: 0,
     width: "100%",
-    padding: "0px 50px",
+    padding: getPadding(),
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    zIndex: 9999, // 非常に高いz-indexを設定
+    zIndex: 9999,
     transition: "var(--transition)",
     filter: "none",
     pointerEvents: "auto",
@@ -61,7 +88,6 @@ const Header = () => {
     boxShadow: !scrolledToTop ? "0 10px 30px -10px rgba(0, 0, 0, 0.3)" : "none",
     backdropFilter: !scrolledToTop ? "blur(10px)" : "none",
     backgroundColor: !scrolledToTop ? "rgba(22, 33, 62, 0.85)" : "var(--navy)",
-    // フルページスクロールに対応する追加スタイル
     WebkitTransform:
       scrollDirection === "down" && !scrolledToTop
         ? "translateY(-100%)"
@@ -74,12 +100,14 @@ const Header = () => {
 
   const logoStyle = {
     color: "var(--green)",
-    fontSize: "1.5rem",
+    fontSize: isMobile ? "1.2rem" : "1.5rem",
     fontWeight: "bold",
     fontFamily: "var(--font-mono)",
     display: "flex",
     alignItems: "center",
     textDecoration: "none",
+    padding: isMobile ? "0 5px" : "0",
+    marginRight: "auto",
   };
 
   return (
@@ -87,7 +115,7 @@ const Header = () => {
       <a href="#section-home" style={logoStyle}>
         <span style={{ color: "var(--green)" }}>T.S</span>
       </a>
-      <Nav navLinks={navLinks} />
+      <Nav navLinks={navLinks} isMobile={isMobile} />
     </header>
   );
 };

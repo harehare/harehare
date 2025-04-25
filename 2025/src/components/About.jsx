@@ -13,6 +13,10 @@ const About = () => {
   // Determine grid template based on screen size
   const gridTemplateColumns = windowWidth < 768 ? "1fr" : "2fr 1fr";
 
+  // モバイルデバイスかどうかを判定
+  const isMobile = windowWidth <= 768;
+  const isSmallMobile = windowWidth <= 480;
+
   return (
     <section
       id="about"
@@ -23,21 +27,29 @@ const About = () => {
         alignItems: "center",
         justifyContent: "center",
         height: "100%",
-        padding: "2rem 1.5rem", // Adjusted padding
+        padding: isMobile
+          ? isSmallMobile
+            ? "2rem 1rem"
+            : "2rem 1.2rem"
+          : "2rem 1.5rem",
         margin: "0 auto",
-        maxWidth: "1400px", // Increased max width to 1400px
+        maxWidth: "1400px",
+        boxSizing: "border-box",
+        width: "100%",
+        overflow: "hidden",
       }}
     >
       <h2
         className="numbered-heading"
         style={{
           overflow: "hidden",
-          whiteSpace: "nowrap",
+          whiteSpace: isMobile ? "normal" : "nowrap",
           width: "100%",
           display: "flex",
           alignItems: "center",
           justifyContent: "flex-start",
           position: "relative",
+          fontSize: isSmallMobile ? "22px" : undefined,
         }}
       >
         About Me
@@ -51,28 +63,38 @@ const About = () => {
         style={{
           display: "grid",
           gridTemplateColumns: gridTemplateColumns,
-          gap: windowWidth < 768 ? "2rem" : "4rem", // Wider responsive spacing
+          gap: isMobile ? "1.5rem" : "4rem",
           position: "relative",
           width: "100%",
+          boxSizing: "border-box",
         }}
       >
-        <div style={{ position: "relative", zIndex: 1 }}>
+        <div
+          style={{
+            position: "relative",
+            zIndex: 1,
+            width: "100%",
+            boxSizing: "border-box",
+          }}
+        >
           <p
             style={{
-              fontSize: "var(--fz-lg)",
+              fontSize: isMobile ? "var(--fz-md)" : "var(--fz-lg)",
               lineHeight: "1.7",
               marginBottom: "1.25rem",
               color: "var(--light-slate)",
+              width: "100%",
             }}
           >
             {personalInfo.bio}
           </p>
           <p
             style={{
-              fontSize: "var(--fz-lg)",
+              fontSize: isMobile ? "var(--fz-md)" : "var(--fz-lg)",
               lineHeight: "1.7",
               marginBottom: "1.25rem",
               color: "var(--light-slate)",
+              width: "100%",
             }}
           >
             I focus on creating tools and applications that solve real problems
@@ -82,9 +104,10 @@ const About = () => {
           </p>
           <p
             style={{
-              fontSize: "var(--fz-lg)",
+              fontSize: isMobile ? "var(--fz-md)" : "var(--fz-lg)",
               marginBottom: "1rem",
               color: "var(--light-slate)",
+              width: "100%",
             }}
           >
             Here are a few technologies I've been working with recently:
@@ -92,13 +115,17 @@ const About = () => {
           <ul
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))",
+              gridTemplateColumns: isSmallMobile
+                ? "repeat(auto-fill, minmax(120px, 1fr))"
+                : "repeat(auto-fill, minmax(140px, 1fr))",
               gap: "0.5rem 1rem",
               padding: 0,
               margin: "1.25rem 0 0 0",
               overflow: "hidden",
               listStyle: "none",
-              maxWidth: "500px", // Set maximum width for skills list
+              maxWidth: isMobile ? "100%" : "500px",
+              width: "100%",
+              boxSizing: "border-box",
             }}
           >
             {skills.map((skill, i) => (
@@ -109,8 +136,11 @@ const About = () => {
                   marginBottom: "0.75rem",
                   paddingLeft: "1.5rem",
                   fontFamily: "var(--font-mono)",
-                  fontSize: "var(--fz-sm)",
+                  fontSize: isSmallMobile ? "var(--fz-xs)" : "var(--fz-sm)",
                   color: "var(--slate)",
+                  textOverflow: "ellipsis",
+                  overflow: "hidden",
+                  whiteSpace: "nowrap",
                 }}
               >
                 <div
@@ -146,9 +176,9 @@ const About = () => {
         <div
           style={{
             position: "relative",
-            maxWidth: windowWidth < 768 ? "250px" : "300px",
-            margin: windowWidth < 768 ? "0 auto" : "2rem auto 0", // Adjusted margin for smaller screens
-            alignSelf: "center", // Vertically centered
+            maxWidth: isMobile ? "200px" : "300px",
+            margin: isMobile ? "0 auto" : "2rem auto 0",
+            alignSelf: "center",
           }}
         >
           <div
@@ -161,8 +191,8 @@ const About = () => {
               backgroundColor: "var(--green)",
               backgroundSize: "cover",
               width: "100%",
-              maxWidth: "300px",
-              aspectRatio: "1 / 1", // Maintain 1:1 aspect ratio
+              maxWidth: isMobile ? "200px" : "300px",
+              aspectRatio: "1 / 1",
               filter: "grayscale(100%) contrast(1) brightness(90%)",
             }}
             onMouseOver={(e) => {

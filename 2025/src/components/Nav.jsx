@@ -1,12 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { personalInfo } from "../data/data";
 
-const Nav = ({ navLinks }) => {
+const Nav = ({ navLinks, isMobile: propIsMobile }) => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+  // Use the prop value if provided, otherwise detect from window size
+  const [isMobile, setIsMobile] = useState(
+    propIsMobile !== undefined ? propIsMobile : false
+  );
 
   // ウィンドウサイズを監視してモバイル状態を設定
   useEffect(() => {
+    // If prop is provided, use that value
+    if (propIsMobile !== undefined) {
+      setIsMobile(propIsMobile);
+      return;
+    }
+
     const checkMobile = () => {
       setIsMobile(window.innerWidth <= 768);
     };
@@ -19,19 +28,20 @@ const Nav = ({ navLinks }) => {
 
     // クリーンアップ
     return () => window.removeEventListener("resize", checkMobile);
-  }, []);
+  }, [propIsMobile]);
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
+    // モバイルメニューが開いているときはスクロールを無効に
+    document.body.style.overflow = menuOpen ? "auto" : "hidden";
   };
 
   // 基本のナビゲーションスタイル
   const navStyle = {
     display: "flex",
-    justifyContent: "space-between",
+    justifyContent: "flex-end",
     alignItems: "center",
     position: "relative",
-    width: "100%",
     color: "var(--lightest-slate)",
     fontFamily: "var(--font-mono)",
     counter: "none",
@@ -43,14 +53,18 @@ const Nav = ({ navLinks }) => {
     display: isMobile ? (menuOpen ? "flex" : "none") : "flex",
     alignItems: "center",
     flexDirection: isMobile ? "column" : "row",
-    position: isMobile ? "absolute" : "relative",
-    top: isMobile ? "100%" : "auto",
+    position: isMobile ? "fixed" : "relative",
+    top: isMobile ? "0" : "auto",
     right: isMobile ? "0" : "auto",
-    padding: isMobile ? "20px" : "0",
+    bottom: isMobile ? "0" : "auto",
+    left: isMobile ? "0" : "auto",
+    padding: isMobile ? "100px 20px 40px" : "0",
     backgroundColor: isMobile ? "var(--light-navy)" : "transparent",
-    borderRadius: isMobile ? "0 0 10px 10px" : "0",
     width: isMobile ? "100%" : "auto",
+    height: isMobile ? "100vh" : "auto",
     boxShadow: isMobile ? "0 10px 30px -15px rgba(0, 0, 0, 0.3)" : "none",
+    transition: "all 0.25s cubic-bezier(0.645, 0.045, 0.355, 1)",
+    justifyContent: isMobile ? "center" : "flex-end",
   };
 
   // リストスタイル - モバイル対応
@@ -66,8 +80,9 @@ const Nav = ({ navLinks }) => {
   };
 
   const listItemStyle = {
-    margin: isMobile ? "10px 0" : "0 5px",
+    margin: isMobile ? "20px 0" : "0 5px",
     position: "relative",
+    fontSize: isMobile ? "var(--fz-lg)" : "var(--fz-sm)",
   };
 
   const linkStyle = {
@@ -87,19 +102,67 @@ const Nav = ({ navLinks }) => {
     justifyContent: "center",
     alignItems: "center",
     position: "relative",
-    zIndex: "10",
+    zIndex: "13",
     margin: "0",
-    padding: "15px",
+    padding: "10px",
     border: "none",
     background: "transparent",
-    color: "inherit",
+    color: menuOpen ? "var(--green)" : "var(--lightest-slate)",
     textTransform: "none",
     transition: "var(--transition)",
     cursor: "pointer",
+    fontSize: "var(--fz-md)",
+    fontFamily: "var(--font-mono)",
+    fontWeight: "600",
+  };
+
+  // ハンバーガーメニューのスタイル
+  const hamburgerStyle = {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-around",
+    width: "24px",
+    height: "24px",
+    background: "transparent",
+    border: "none",
+    cursor: "pointer",
+    padding: "0",
+    zIndex: "13",
+  };
+
+  const hamburgerLineStyle = (index) => ({
+    width: "100%",
+    height: "2px",
+    backgroundColor: menuOpen ? "var(--green)" : "var(--lightest-slate)",
+    transition: "all 0.3s ease",
+    position: "relative",
+    transform:
+      menuOpen && index === 0
+        ? "rotate(45deg) translate(5px, 5px)"
+        : menuOpen && index === 2
+        ? "rotate(-45deg) translate(5px, -5px)"
+        : "none",
+    opacity: menuOpen && index === 1 ? 0 : 1,
+  });
+
+  // モバイルメニューのオーバーレイスタイル
+  const overlayStyle = {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(22, 33, 62, 0.95)",
+    zIndex: 11,
+    display: isMobile && menuOpen ? "block" : "none",
+    backdropFilter: "blur(5px)",
   };
 
   return (
     <nav style={navStyle}>
+      {/* Overlay for mobile menu */}
+      <div style={overlayStyle} onClick={toggleMenu} />
+
       <div style={linksStyle}>
         <ol style={listStyle}>
           {navLinks.map(({ name, url }, i) => (
@@ -107,6 +170,7 @@ const Nav = ({ navLinks }) => {
               <a
                 href={url}
                 style={linkStyle}
+                onClick={() => isMobile && toggleMenu()}
                 onMouseOver={(e) => {
                   e.target.style.color = "var(--green)";
                   const after = document.createElement("style");
@@ -150,13 +214,15 @@ const Nav = ({ navLinks }) => {
               color: "var(--green)",
               borderRadius: "30px",
               border: "2px solid var(--green)",
-              padding: "0.75rem 1.5rem",
+              padding: isMobile ? "0.6rem 1.2rem" : "0.75rem 1.5rem",
               fontWeight: "500",
               letterSpacing: "1px",
               boxShadow: "0 3px 10px rgba(113, 223, 231, 0.2)",
               transition: "all 0.3s ease",
               textDecoration: "none",
-              marginTop: isMobile ? "20px" : "0",
+              marginTop: isMobile ? "30px" : "0",
+              marginLeft: isMobile ? "0" : "15px",
+              fontSize: isMobile ? "var(--fz-md)" : "var(--fz-sm)",
             }}
             onMouseOver={(e) => {
               e.target.style.backgroundColor = "var(--green)";
@@ -181,7 +247,11 @@ const Nav = ({ navLinks }) => {
         onClick={toggleMenu}
         aria-label={menuOpen ? "Close menu" : "Open menu"}
       >
-        {menuOpen ? "Close" : "Menu"}
+        <div style={hamburgerStyle}>
+          <span style={hamburgerLineStyle(0)}></span>
+          <span style={hamburgerLineStyle(1)}></span>
+          <span style={hamburgerLineStyle(2)}></span>
+        </div>
       </button>
     </nav>
   );
