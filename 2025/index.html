@@ -2,23 +2,22 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="apple-touch-icon" href="/logo.svg" />
+    <link rel="icon" type="image/svg+xml" href="/harehare/favicon.svg" />
+    <link rel="apple-touch-icon" href="/harehare/logo.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
       content="Takahiro Sato - Software Engineer. Portfolio showcasing developer tools and projects."
     />
     <meta name="theme-color" content="#16213E" />
-    <link rel="manifest" href="/manifest.json" />
+    <link rel="manifest" href="/harehare/manifest.json" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta
       name="apple-mobile-web-app-status-bar-style"
       content="black-translucent"
     />
     <meta name="apple-mobile-web-app-title" content="T.S Portfolio" />
-    <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
-    <!-- Preload fonts for better performance -->
+    <link rel="apple-touch-icon" href="/harehare/icons/icon-192x192.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -27,7 +26,6 @@
       media="print"
       onload="this.media='all'"
     />
-    <!-- Fallback for no JavaScript -->
     <noscript>
       <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap"
@@ -39,21 +37,5 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
-    <!-- サービスワーカーの登録スクリプト -->
-    <script>
-      if ("serviceWorker" in navigator) {
-        window.addEventListener("load", () => {
-          const swUrl = window.location.origin + "/sw.js";
-          navigator.serviceWorker
-            .register(swUrl)
-            .then((registration) => {
-              console.log("ServiceWorker登録成功:", registration.scope);
-            })
-            .catch((error) => {
-              console.log("ServiceWorker登録失敗:", error);
-            });
-        });
-      }
-    </script>
   </body>
 </html>
