@@ -3,13 +3,13 @@ const CACHE_NAME = "portfolio-cache-v1";
 
 // キャッシュするアセットのリスト
 const urlsToCache = [
-  "/agent_portfolio/",
-  "/agent_portfolio/index.html",
-  "/agent_portfolio/manifest.json",
-  "/agent_portfolio/favicon.svg",
-  "/agent_portfolio/logo.svg",
-  "/agent_portfolio/offline.html",
-  "/agent_portfolio/icons/icon.svg",
+  "/",
+  "/index.html",
+  "/manifest.json",
+  "/favicon.svg",
+  "/logo.svg",
+  "/offline.html",
+  "/icons/icon.svg",
   // フォントやCSS、JavaScriptファイル等も必要に応じてキャッシュ
 ];
 
@@ -88,15 +88,15 @@ self.addEventListener("fetch", (event) => {
             // オフライン時の処理
             // HTMLページのリクエストの場合はオフラインページを返す
             if (event.request.headers.get("accept").includes("text/html")) {
-              return caches.match("/agent_portfolio/offline.html");
+              return caches.match("/offline.html");
             }
 
             // その他のリソースは通常のキャッシュフォールバックを試行
             if (
               event.request.url.indexOf(".html") > -1 ||
-              event.request.url.endsWith("/agent_portfolio/")
+              event.request.url.endsWith("/")
             ) {
-              return caches.match("/agent_portfolio/index.html");
+              return caches.match("/index.html");
             }
           });
       })

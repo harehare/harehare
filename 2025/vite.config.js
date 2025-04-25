@@ -5,7 +5,7 @@ import react from "@vitejs/plugin-react";
 // リポジトリ名がURLのパスとなるため、その対応
 export default defineConfig({
   plugins: [react()],
-  base: "/agent_portfolio/", // GitHubリポジトリ名に合わせて変更
+  base: "/", // GitHubリポジトリ名に合わせて変更
 
   // ビルド最適化の設定
   build: {

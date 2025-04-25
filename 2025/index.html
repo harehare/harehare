@@ -10,18 +10,14 @@
       content="Takahiro Sato - Software Engineer. Portfolio showcasing developer tools and projects."
     />
     <meta name="theme-color" content="#16213E" />
-    <!-- PWA対応の設定追加 -->
-    <link rel="manifest" href="/agent_portfolio/manifest.json" />
+    <link rel="manifest" href="/manifest.json" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta
       name="apple-mobile-web-app-status-bar-style"
       content="black-translucent"
     />
     <meta name="apple-mobile-web-app-title" content="T.S Portfolio" />
-    <link
-      rel="apple-touch-icon"
-      href="/agent_portfolio/icons/icon-192x192.png"
-    />
+    <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
     <!-- Preload fonts for better performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -47,7 +43,7 @@
     <script>
       if ("serviceWorker" in navigator) {
         window.addEventListener("load", () => {
-          const swUrl = window.location.origin + "/agent_portfolio/sw.js";
+          const swUrl = window.location.origin + "/sw.js";
           navigator.serviceWorker
             .register(swUrl)
             .then((registration) => {
