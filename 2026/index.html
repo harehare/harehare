@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Markdown Portfolio</title>
+    <style>
+        /*
+         * Target Site Color Adjustments:
+         * Primary Accent (Headers/Links): Bright Cyan/Teal (#4ec9b0)
+         * Background: Dark Grey (#1e1e1e)
+         */
+
+        :root {
+            --bg-color: #16213E;
+            --text-color: #98A3BC;
+            --line-num-color: #98A3BC;
+            --line-num-bg: #16213E;
+            --header-color: #71DFE7; /* Green accent from harehare site */
+            --link-text-color: #71DFE7; /* Green accent for link display text */
+            --url-color: #98A3BC; /* Slate color for URL part */
+            --list-marker-color: #C65D7B; /* Accent secondary color for dashes */
+            --bold-color: #71DFE7; /* Green accent for bold text */
+            --code-bg: #1E2A47;
+            --cursor-color: #71DFE7;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            overflow-x: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Bar (Window controls) */
+        .window-bar {
+            background-color: #1E2A47;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #2E3E5C;
+            flex-shrink: 0;
+        }
+
+        .window-controls {
+            display: flex;
+            gap: 8px;
+            margin-right: 15px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .dot.red { background-color: #ff5f56; }
+        .dot.yellow { background-color: #ffbd2e; }
+        .dot.green { background-color: #27c93f; }
+
+        .file-name {
+            font-size: 0.9em;
+            color: #B9C5DE;
+            margin-left: 10px;
+        }
+
+        /* Main Editor Area */
+        .editor-container {
+            display: flex;
+            flex: 1;
+            overflow-y: auto;
+            padding-top: 10px;
+        }
+
+        /* Line Numbers */
+        .line-numbers {
+            text-align: right;
+            padding: 0 15px 0 10px;
+            color: var(--line-num-color);
+            border-right: 1px solid #2E3E5C;
+            user-select: none;
+            font-size: 14px;
+            line-height: 1.6;
+            min-width: 50px;
+            background-color: var(--line-num-bg);
+        }
+
+        /* Code Content */
+        .code-area {
+            flex: 1;
+            padding: 0 15px 50px 15px;
+            white-space: pre-wrap;
+            word-break: break-all;
+            outline: none;
+        }
+
+        /* Syntax Highlighting Classes */
+        .md-header {
+            color: var(--header-color);
+            font-weight: bold;
+        }
+        .md-header-syntax {
+            color: var(--header-color); /* Use the main accent color for # symbol */
+            margin-right: 5px;
+        }
+
+        .md-list-marker {
+            color: var(--list-marker-color);
+            font-weight: bold;
+        }
+
+        .md-link-bracket {
+            color: #d4d4d4;
+        }
+        
+        .md-link-text {
+            color: var(--link-text-color);
+            text-decoration: underline;
+            cursor: pointer;
+        }
+        .md-link-text:hover {
+            color: #B9C5DE;
+        }
+
+        .md-url-wrapper {
+            color: var(--url-color);
+            font-size: 0.9em;
+        }
+        
+        .md-code-inline {
+            background-color: var(--code-bg);
+            padding: 2px 4px;
+            border-radius: 3px;
+            color: #D8E0F0;
+        }
+
+        .md-bold {
+            color: var(--bold-color);
+            font-weight: bold;
+        }
+
+        .md-quote {
+            color: #98A3BC;
+            font-style: italic;
+        }
+
+        /* Cursor Animation */
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 15px;
+            background-color: var(--cursor-color);
+            animation: blink 1s step-end infinite;
+            vertical-align: middle;
+            margin-left: 2px;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 600px) {
+            .line-numbers {
+                display: none;
+            }
+            .code-area {
+                padding-left: 15px;
+            }
+            body {
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="window-bar">
+        <div class="window-controls">
+            <div class="dot red"></div>
+            <div class="dot yellow"></div>
+            <div class="dot green"></div>
+        </div>
+        <div class="file-name">README.md</div>
+    </div>
+
+    <div class="editor-container">
+        <div class="line-numbers" id="line-numbers">
+            <!-- Line numbers generated by JS -->
+        </div>
+        <div class="code-area" id="code-content">
+            <!-- Content injected by JS -->
+        </div>
+    </div>
+
+    <script>
+        // Insert your portfolio content here (in Markdown format)
+        // Link format [Display Text](URL) will automatically become a clickable link
+        const markdownContent = `
+# Hello, I'm Takahiro Sato.
+
+Software Engineer based in Japan
+
+## About
+
+I'm a Software Engineer based in Saitama, Japan. I specialize in web development and developer tools, creating clean solutions that enhance productivity and solve real problems.
+My projects range from development tools to CLI utilities that make everyday tasks easier and more efficient.
+
+## Skills
+
+### Languages
+
+- TypeScript
+- JavaScript
+- Go
+- Rust
+- Python
+
+### Frontend
+
+- React
+- Vue.js
+- Vite
+- Elm
+
+### Backend
+
+- Rust
+- Go
+- Python
+- Ruby
+- Node.js
+
+### Cloud & DevOps
+
+- AWS
+- GCP
+- Docker
+- Kubernetes
+- GitHub Actions
+
+### Tools
+
+- Git
+- VS Code
+- Vim
+- Linux
+
+## Projects
+
+### mq
+
+A markdown processor inspired by jq. Process markdown files with query language.
+
+**Tech Stack**: Rust, WebAssembly, TypeScript
+**Links**: [GitHub](https://github.com/harehare/mq)
+
+### textusm
+
+An online tool for generating diagrams from text.
+
+**Tech Stack**: Elm, TypeScript
+**Links**: [Website](https://textusm.com) | [GitHub](https://github.com/harehare/textusm)
+
+### Other Open Source Projects
+
+Various contributions to open source community
+
+## Contact
+
+- **GitHub**: [@harehare](https://github.com/harehare)
+`;
+
+        function parseMarkdown(text) {
+            const lines = text.split('\n');
+            let html = '';
+            
+            lines.forEach(line => {
+                let processedLine = escapeHtml(line);
+
+                // 1. Headers (e.g., # Title)
+                if (line.match(/^#+\s/)) {
+                    processedLine = processedLine.replace(/^((#+)\s+)(.*)$/, 
+                        '<span class="md-header"><span class="md-header-syntax">$1</span>$3</span>');
+                }
+                
+                // 2. Lists (e.g., - Item)
+                else if (line.match(/^\s*-\s/)) {
+                    processedLine = processedLine.replace(/^(\s*-\s)(.*)$/, 
+                        '<span class="md-list-marker">$1</span>$2');
+                }
+
+                // 3. Blockquotes (e.g., > Quote)
+                else if (line.match(/^\s*>/)) {
+                    processedLine = `<span class="md-quote">${processedLine}</span>`;
+                }
+
+                // Inline styles (Apply to all lines)
+                
+                // Bold (**text**)
+                processedLine = processedLine.replace(/\*\*(.*?)\*\*/g, 
+                    '<span class="md-bold">**$1**</span>');
+
+                // Code inline (`code`)
+                processedLine = processedLine.replace(/`([^`]+)`/g, 
+                    '<span class="md-code-inline">`$1`</span>');
+
+                // Links [Text](URL) - Make them clickable but keep syntax
+                // Regex looks for [text](url)
+                processedLine = processedLine.replace(/\[([^\]]+)\]\(([^)]+)\)/g, 
+                    '<span class="md-link-bracket">[</span><a href="$2" target="_blank" class="md-link-text">$1</a><span class="md-link-bracket">](</span><span class="md-url-wrapper">$2</span><span class="md-link-bracket">)</span>');
+
+                html += processedLine + '\n';
+            });
+
+            return html + '<span class="cursor"></span>';
+        }
+
+        function escapeHtml(text) {
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        // Render Content
+        const codeElement = document.getElementById('code-content');
+        const lineNumbersElement = document.getElementById('line-numbers');
+
+        // Apply Parsing
+        codeElement.innerHTML = parseMarkdown(markdownContent);
+
+        // Generate Line Numbers
+        const lineCount = markdownContent.split('\n').length;
+        let lineNumbersHtml = '';
+        for (let i = 1; i <= lineCount + 1; i++) {
+            lineNumbersHtml += `<div>${i}</div>`;
+        }
+        lineNumbersElement.innerHTML = lineNumbersHtml;
+
+    </script>
+</body>
+</html>
+
